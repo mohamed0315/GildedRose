@@ -23,24 +23,48 @@ class Shop {
 
   updateQualite(Item) {
     if (Item.name != 'Aged Brie' && Item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-      if (Item.quality > 0) {
-        if (Item.name != 'Sulfuras, Hand of Ragnaros') {
-          Item.quality = Item.quality - 1;
-        }
-      }
+      this.diminuerQualiteSiExiste(Item);
     } else {
-      if (Item.quality < 50) {
-        Item.quality = Item.quality + 1;
-        if (Item.name == 'Backstage passes to a TAFKAL80ETC concert') {
-          if (Item.sellIn < 11) {
-            this.augmenterQualite(Item);
+      this.augmenterQualiteAvecBackStage(Item);
+    }
+  }
 
-          }
-          if (Item.sellIn < 6) {
-            this.augmenterQualite(Item);
-          }
-        }
-      }
+  diminuerQualiteSiExiste(Item) {
+    if (Item.quality > 0) {
+      this.diminuerQualite(Item);
+    }
+  }
+
+  diminuerQualite(Item) {
+    if (Item.name != 'Sulfuras, Hand of Ragnaros') {
+      Item.quality = Item.quality - 1;
+    }
+  }
+
+  augmenterQualiteAvecBackStage(Item) {
+    if (Item.quality < 50) {
+      Item.quality = Item.quality + 1;
+      this.increaseQualiteBackStage(Item);
+    }
+  }
+
+  increaseQualiteBackStage(Item) {
+    if (Item.name == 'Backstage passes to a TAFKAL80ETC concert') {
+      this.augmenterQualiterSiPasExpiree(Item);
+      this.augmenterQualiteSiProcheExpiration(Item);
+    }
+  }
+
+  augmenterQualiteSiProcheExpiration(Item) {
+    if (Item.sellIn < 6) {
+      this.augmenterQualite(Item);
+    }
+  }
+
+  augmenterQualiterSiPasExpiree(Item) {
+    if (Item.sellIn < 11) {
+      this.augmenterQualite(Item);
+
     }
   }
 
@@ -67,19 +91,18 @@ class Shop {
 
   gererExpiration(Item) {
     if (Item.name != 'Aged Brie') {
-      if (Item.name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (Item.quality > 0) {
-          if (Item.name != 'Sulfuras, Hand of Ragnaros') {
-            Item.quality = Item.quality - 1;
-          }
-        }
-      } else {
-        Item.quality = Item.quality - Item.quality;
-      }
+      this.gererItemExpireNotAgedBrie(Item);
     } else {
-      if (Item.quality < 50) {
-        Item.quality = Item.quality + 1;
-      }
+      this.augmenterQualite(Item);
+    }
+  }
+
+
+  gererItemExpireNotAgedBrie(Item) {
+    if (Item.name != 'Backstage passes to a TAFKAL80ETC concert') {
+      this.diminuerQualiteSiExiste(Item);
+    } else {
+      Item.quality = Item.quality - Item.quality;
     }
   }
 }
